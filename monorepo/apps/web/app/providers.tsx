@@ -6,7 +6,6 @@ import { mainnet, polygon,linea, lineaSepolia , arbitrum, optimism, sepolia } fr
 import { metaMask } from "wagmi/connectors";
 
 
-// Configure Wagmi with MetaMask SDK
 const config = createConfig({
   ssr: true,
   chains: [mainnet, polygon, arbitrum, optimism, sepolia],
