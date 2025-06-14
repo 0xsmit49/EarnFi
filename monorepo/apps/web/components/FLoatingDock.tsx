@@ -48,7 +48,22 @@ export default function MyCustomComponent() {
           <WalletConnector />
         </div>
 
-      
+        {/* Icon Group (Centered) */}
+        <div className="flex items-center gap-6 mx-auto">
+          <IconContainer
+            mouseX={mouseX}
+            title="Home"
+            icon={<IconHome style={{ color: "#74c69d" }} />} // Orange/Gold accent
+            href="/"
+          />
+          <IconContainer
+            mouseX={mouseX}
+            title="Vault Explorer"
+            icon={<IconLayoutDashboard style={{ color: "#74c69d" }} />} // Orange/Gold accent
+            href="/vault-explorer"
+          />
+          
+        </div>
 
       
        
