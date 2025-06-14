@@ -96,7 +96,46 @@ export default function HeroSection() {
     };
   }, [isLive]);
 
- 
+  const SubtleGrid = () => (
+    <div className="absolute inset-0 opacity-5">
+      <svg width="100%" height="100%" className="absolute inset-0">
+        <defs>
+          <pattern
+            id="subtlegrid"
+            width="40"
+            height="40"
+            patternUnits="userSpaceOnUse"
+          >
+            <path
+              d="M 40 0 L 0 0 0 40"
+              fill="none"
+              stroke="rgb(20 184 166 / 0.3)"
+              strokeWidth="0.5"
+            />
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#subtlegrid)" />
+      </svg>
+    </div>
+  );
+
+  const getCardTransform = () => {
+    let transform = 'perspective(1000px)';
+    
+    if (cardFlipped) {
+      transform += ' rotateY(180deg)';
+    }
+    
+    // Only apply 3D hover effects when not flipped or when specifically hovering the flipped card
+    if (cardHovered && !cardFlipped) {
+      const rotateX = (mousePosition.y - 50) * 0.1;
+      const rotateY = (mousePosition.x - 50) * 0.1;
+      transform += ` rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateZ(10px)`;
+    }
+    
+    return transform;
+  };
+
   const handleCurveClick = (event) => {
     const rect = event.currentTarget.getBoundingClientRect();
     const svgRect = event.currentTarget.querySelector('svg').getBoundingClientRect();
