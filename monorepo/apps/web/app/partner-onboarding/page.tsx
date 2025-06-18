@@ -43,280 +43,249 @@ export default function EarnFiPartnerSystem() {
     ]);
   }, []);
 
-  
-
-  // Step 2: Perk Configuration Component
-  const PerkConfiguration = () => {
-    const [newPerk, setNewPerk] = useState({
-      title: '',
+  // Step 1: Partner Registration Component
+  const PartnerRegistration = () => {
+    const [formData, setFormData] = useState({
+      organizationName: '',
+      organizationType: '',
+      location: '',
+      email: '',
+      website: '',
       description: '',
-      region: '',
-      threshold: 100,
-      inventory: 50,
-      tier: 'Bronze',
-      type: 'discount',
-      nftCode: '',
-      nfcCode: ''
+      kycDocument: null
     });
-    const [showForm, setShowForm] = useState(false);
+    const [verificationStatus, setVerificationStatus] = useState('pending');
+    const [uploadProgress, setUploadProgress] = useState(0);
 
-    const handleCreatePerk = (e) => {
-      e.preventDefault();
-      const perk = {
-        id: perks.length + 1,
-        ...newPerk,
-        partner: partners[0]?.name || 'Your Organization',
-        claimed: 0,
-        total: parseInt(newPerk.inventory)
-      };
-      setPerks([...perks, perk]);
-      setNotifications([
-        { id: Date.now(), type: 'success', message: `New perk "${newPerk.title}" created`, time: 'Just now' },
-        ...notifications
-      ]);
-      setNewPerk({
-        title: '',
-        description: '',
-        region: '',
-        threshold: 100,
-        inventory: 50,
-        tier: 'Bronze',
-        type: 'discount',
-        nftCode: '',
-        nfcCode: ''
+    const handleInputChange = (e) => {
+      setFormData({
+        ...formData,
+        [e.target.name]: e.target.value
       });
-      setShowForm(false);
     };
 
-    const generateCode = (type) => {
-      const code = Math.random().toString(36).substring(2, 10).toUpperCase();
-      setNewPerk({
-        ...newPerk,
-        [type]: code
-      });
+    const handleFileUpload = (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        setFormData({ ...formData, kycDocument: file });
+        // Simulate upload progress
+        let progress = 0;
+        const interval = setInterval(() => {
+          progress += 10;
+          setUploadProgress(progress);
+          if (progress >= 100) {
+            clearInterval(interval);
+            setTimeout(() => setVerificationStatus('verified'), 1000);
+          }
+        }, 200);
+      }
+    };
+
+    const handleSubmit = (e) => {
+      e.preventDefault();
+      const newPartner = {
+        id: partners.length + 1,
+        name: formData.organizationName,
+        type: formData.organizationType,
+        status: verificationStatus,
+        tier: 'Bronze',
+        location: formData.location,
+        email: formData.email,
+        website: formData.website
+      };
+      setPartners([...partners, newPartner]);
+      setNotifications([
+        { id: Date.now(), type: 'success', message: `New partner ${formData.organizationName} registered`, time: 'Just now' },
+        ...notifications
+      ]);
     };
 
     return (
       <div className="space-y-6">
        
 
-        <div className="flex justify-between items-center">
-          <h3 className="text-xl font-semibold text-white">Active Perks</h3>
-          <button
-            onClick={() => setShowForm(true)}
-            className="bg-gradient-to-r from-green-600 to-teal-600 text-white px-6 py-2 rounded-lg hover:from-green-700 hover:to-teal-700 transition-all duration-300"
-          >
-            Create New Perk
-          </button>
-        </div>
-
-        {showForm && (
+        <div className="grid md:grid-cols-2 gap-6">
           <div className="bg-gray-800 rounded-xl p-6">
-            <h4 className="text-lg font-semibold mb-4 text-white">Create New Perk</h4>
-            <form onSubmit={handleCreatePerk} className="space-y-4">
-              <div className="grid md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Perk Title</label>
-                  <input
-                    type="text"
-                    value={newPerk.title}
-                    onChange={(e) => setNewPerk({ ...newPerk, title: e.target.value })}
-                    className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-green-500 focus:outline-none text-white"
-                    placeholder="e.g., Free Coffee"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Region</label>
-                  <input
-                    type="text"
-                    value={newPerk.region}
-                    onChange={(e) => setNewPerk({ ...newPerk, region: e.target.value })}
-                    className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-green-500 focus:outline-none text-white"
-                    placeholder="e.g., San Francisco"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Spend Threshold ($)</label>
-                  <input
-                    type="number"
-                    value={newPerk.threshold}
-                    onChange={(e) => setNewPerk({ ...newPerk, threshold: parseInt(e.target.value) })}
-                    className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-green-500 focus:outline-none text-white"
-                    min="0"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Inventory Count</label>
-                  <input
-                    type="number"
-                    value={newPerk.inventory}
-                    onChange={(e) => setNewPerk({ ...newPerk, inventory: parseInt(e.target.value) })}
-                    className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-green-500 focus:outline-none text-white"
-                    min="1"
-                    required
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Tier Requirement</label>
-                  <select
-                    value={newPerk.tier}
-                    onChange={(e) => setNewPerk({ ...newPerk, tier: e.target.value })}
-                    className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-green-500 focus:outline-none text-white"
-                  >
-                    <option value="Bronze">Bronze</option>
-                    <option value="Silver">Silver</option>
-                    <option value="Gold">Gold</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">Perk Type</label>
-                  <select
-                    value={newPerk.type}
-                    onChange={(e) => setNewPerk({ ...newPerk, type: e.target.value })}
-                    className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-green-500 focus:outline-none text-white"
-                  >
-                    <option value="discount">Discount</option>
-                    <option value="freebie">Free Item</option>
-                    <option value="access">Special Access</option>
-                    <option value="nft">NFT Reward</option>
-                  </select>
-                </div>
-              </div>
-
+            <h3 className="text-xl font-semibold mb-4 text-white">Organization Details</h3>
+            <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label className="block text-sm font-medium text-gray-300 mb-2">Description</label>
-                <textarea
-                  value={newPerk.description}
-                  onChange={(e) => setNewPerk({ ...newPerk, description: e.target.value })}
-                  className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-green-500 focus:outline-none text-white"
-                  rows="3"
-                  placeholder="Describe the perk details..."
+                <label className="block text-sm font-medium text-gray-300 mb-2">Organization Name</label>
+                <input
+                  type="text"
+                  name="organizationName"
+                  value={formData.organizationName}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-blue-500 focus:outline-none text-white"
+                  placeholder="Your Organization Name"
+                  required
                 />
               </div>
 
-              <div className="grid md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">NFT Unlock Code</label>
-                  <div className="flex space-x-2">
-                    <input
-                      type="text"
-                      value={newPerk.nftCode}
-                      onChange={(e) => setNewPerk({ ...newPerk, nftCode: e.target.value })}
-                      className="flex-1 px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-green-500 focus:outline-none text-white"
-                      placeholder="Enter or generate code"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => generateCode('nftCode')}
-                      className="px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                    >
-                      Generate
-                    </button>
-                  </div>
-                </div>
-
-                <div>
-                  <label className="block text-sm font-medium text-gray-300 mb-2">NFC Unlock Code</label>
-                  <div className="flex space-x-2">
-                    <input
-                      type="text"
-                      value={newPerk.nfcCode}
-                      onChange={(e) => setNewPerk({ ...newPerk, nfcCode: e.target.value })}
-                      className="flex-1 px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-green-500 focus:outline-none text-white"
-                      placeholder="Enter or generate code"
-                    />
-                    <button
-                      type="button"
-                      onClick={() => generateCode('nfcCode')}
-                      className="px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
-                    >
-                      Generate
-                    </button>
-                  </div>
-                </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">Organization Type</label>
+                <select
+                  name="organizationType"
+                  value={formData.organizationType}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-blue-500 focus:outline-none text-white"
+                  required
+                >
+                  <option value="">Select type...</option>
+                  <option value="Restaurant">Restaurant/Hospitality</option>
+                  <option value="Event">Event Organizer</option>
+                  <option value="DAO">DAO/Community</option>
+                  <option value="Brand">Brand/Retailer</option>
+                  <option value="Entertainment">Entertainment Venue</option>
+                </select>
               </div>
 
-              <div className="flex space-x-4">
-                <button
-                  type="submit"
-                  className="bg-gradient-to-r from-green-600 to-teal-600 text-white px-6 py-3 rounded-lg hover:from-green-700 hover:to-teal-700 transition-all duration-300"
-                >
-                  Create Perk
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setShowForm(false)}
-                  className="bg-gray-600 text-white px-6 py-3 rounded-lg hover:bg-gray-700 transition-colors"
-                >
-                  Cancel
-                </button>
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">Primary Location</label>
+                <input
+                  type="text"
+                  name="location"
+                  value={formData.location}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-blue-500 focus:outline-none text-white"
+                  placeholder="City, State/Country"
+                  required
+                />
               </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">Contact Email</label>
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-blue-500 focus:outline-none text-white"
+                  placeholder="contact@yourorg.com"
+                  required
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">Website URL</label>
+                <input
+                  type="url"
+                  name="website"
+                  value={formData.website}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-blue-500 focus:outline-none text-white"
+                  placeholder="https://yourwebsite.com"
+                />
+              </div>
+
+              <button
+                type="submit"
+                className="w-full bg-gradient-to-r from-orange-500 to-orange-400 text-white font-semibold py-3 px-6 rounded-lg hover:from-orange-300 hover:to-orange-200 transition-all duration-300"
+              >
+                Register Partner
+              </button>
             </form>
           </div>
-        )}
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {perks.map((perk) => (
-            <div key={perk.id} className="bg-gray-800 rounded-xl p-6 border border-gray-700">
-              <div className="flex items-center justify-between mb-4">
-                <h4 className="font-semibold text-white">{perk.title}</h4>
-                <Gift className="w-5 h-5 text-green-400" />
-              </div>
-              
-              <div className="space-y-2 text-sm">
-                <div className="flex justify-between">
-                  <span className="text-gray-400">Partner:</span>
-                  <span className="text-white">{perk.partner}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-400">Region:</span>
-                  <span className="text-white">{perk.region}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-400">Threshold:</span>
-                  <span className="text-white">${perk.threshold}</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-gray-400">Claimed:</span>
-                  <span className="text-white">{perk.claimed}/{perk.total}</span>
-                </div>
-              </div>
-
-              <div className="mt-4">
-                <div className="flex justify-between text-sm mb-1">
-                  <span className="text-gray-400">Inventory</span>
-                  <span className="text-white">{Math.round((perk.claimed / perk.total) * 100)}%</span>
-                </div>
-                <div className="w-full bg-gray-700 rounded-full h-2">
-                  <div
-                    className="bg-green-500 h-2 rounded-full transition-all duration-300"
-                    style={{ width: `${(perk.claimed / perk.total) * 100}%` }}
+          <div className="bg-gray-800 rounded-xl p-6">
+            <h3 className="text-xl font-semibold mb-4 text-white">KYC Verification</h3>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">
+                  Upload Business License/Registration Document
+                </label>
+                <div className="border-2 border-dashed border-gray-600 rounded-lg p-6 text-center">
+                  <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+                  <input
+                    type="file"
+                    onChange={handleFileUpload}
+                    accept=".pdf,.jpg,.jpeg,.png"
+                    className="hidden"
+                    id="kyc-upload"
                   />
+                  <label
+                    htmlFor="kyc-upload"
+                    className="cursor-pointer text-blue-400 hover:text-blue-300"
+                  >
+                    Click to upload or drag and drop
+                  </label>
+                  <p className="text-gray-500 text-sm mt-2">PDF, JPG, PNG up to 10MB</p>
                 </div>
               </div>
 
-              <div className="mt-4 flex space-x-2">
-                <button className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors text-sm">
-                  Edit
-                </button>
-                <button className="flex-1 bg-gray-600 text-white py-2 px-4 rounded-lg hover:bg-gray-700 transition-colors text-sm">
-                  Analytics
-                </button>
+              {uploadProgress > 0 && (
+                <div className="space-y-2">
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-300">Upload Progress</span>
+                    <span className="text-blue-400">{uploadProgress}%</span>
+                  </div>
+                  <div className="w-full bg-gray-700 rounded-full h-2">
+                    <div 
+                      className="bg-blue-600 h-2 rounded-full transition-all duration-300"
+                      style={{ width: `${uploadProgress}%` }}
+                    />
+                  </div>
+                </div>
+              )}
+
+              <div className="flex items-center space-x-3 p-4 bg-gray-700 rounded-lg">
+                {verificationStatus === 'verified' ? (
+                  <CheckCircle className="w-6 h-6 text-green-500" />
+                ) : (
+                  <AlertCircle className="w-6 h-6 text-yellow-500" />
+                )}
+                <div>
+                  <p className="text-white font-medium">
+                    Verification Status: {verificationStatus === 'verified' ? 'Verified' : 'Pending'}
+                  </p>
+                  <p className="text-gray-400 text-sm">
+                    {verificationStatus === 'verified' 
+                      ? 'Your organization has been verified' 
+                      : 'Upload documents to complete verification'}
+                  </p>
+                </div>
               </div>
             </div>
-          ))}
+          </div>
+        </div>
+
+        <div className="bg-gray-800 rounded-xl p-6">
+          <h3 className="text-xl font-semibold mb-4 text-white">Registered Partners</h3>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {partners.map((partner) => (
+              <div key={partner.id} className="bg-gray-700 rounded-lg p-4 border border-gray-600">
+                <div className="flex items-center justify-between mb-2">
+                  <h4 className="font-semibold text-white">{partner.name}</h4>
+                  <span className={`px-2 py-1 rounded text-xs ${
+                    partner.status === 'verified' ? 'bg-green-500/20 text-green-400' : 'bg-yellow-500/20 text-yellow-400'
+                  }`}>
+                    {partner.status}
+                  </span>
+                </div>
+                <p className="text-gray-400 text-sm mb-1">{partner.type}</p>
+                <div className="flex items-center text-gray-400 text-sm">
+                  <MapPin className="w-4 h-4 mr-1" />
+                  {partner.location}
+                </div>
+                <div className="mt-2 flex items-center space-x-2">
+                  <span className="text-xs text-gray-500">Tier:</span>
+                  <span className={`px-2 py-1 rounded text-xs ${
+                    partner.tier === 'Gold' ? 'bg-yellow-500/20 text-yellow-400' :
+                    partner.tier === 'Silver' ? 'bg-gray-500/20 text-gray-400' :
+                    'bg-orange-500/20 text-orange-400'
+                  }`}>
+                    {partner.tier}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     );
   };
+
+  
 
   // Step 3: Integration & Monitoring Component
   const IntegrationMonitoring = () => {
