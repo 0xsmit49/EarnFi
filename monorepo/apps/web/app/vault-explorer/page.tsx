@@ -470,39 +470,7 @@ const availableTags = [
           {showFilters && (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t border-slate-800/50">
               {/* Token Filter */}
-              <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">Assets</label>
-                <div className="flex flex-wrap gap-2">
-                  {tokens.slice(0, 6).map(token => (
-                    <button
-                      key={token}
-                      onClick={() => toggleFilter('tokens', token)}
-                      className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${
-                        filters.tokens.includes(token)
-                          ? 'bg-teal-500/20 text-teal-300 border border-teal-500/30'
-                          : 'bg-slate-800/50 text-slate-400 border border-slate-700/50 hover:bg-slate-700/50'
-                      }`}
-                    >
-                      {token}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Risk Filter */}
-              <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">Risk Level</label>
-                <select
-                  value={filters.riskProfile}
-                  onChange={(e) => setFilters(prev => ({ ...prev, riskProfile: e.target.value }))}
-                  className="w-full px-3 py-2 bg-slate-800/50 border border-slate-700/50 rounded-lg text-white focus:outline-none focus:border-teal-500/50"
-                >
-                  <option value="all">All Risk Levels</option>
-                  {riskProfiles.map(risk => (
-                    <option key={risk} value={risk}>{risk} Risk</option>
-                  ))}
-                </select>
-              </div>
+             
 
               {/* Strategy Filter */}
               <div>
