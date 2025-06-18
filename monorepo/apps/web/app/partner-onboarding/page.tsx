@@ -285,7 +285,278 @@ export default function EarnFiPartnerSystem() {
     );
   };
 
-  
+  // Step 2: Perk Configuration Component
+  const PerkConfiguration = () => {
+    const [newPerk, setNewPerk] = useState({
+      title: '',
+      description: '',
+      region: '',
+      threshold: 100,
+      inventory: 50,
+      tier: 'Bronze',
+      type: 'discount',
+      nftCode: '',
+      nfcCode: ''
+    });
+    const [showForm, setShowForm] = useState(false);
+
+    const handleCreatePerk = (e) => {
+      e.preventDefault();
+      const perk = {
+        id: perks.length + 1,
+        ...newPerk,
+        partner: partners[0]?.name || 'Your Organization',
+        claimed: 0,
+        total: parseInt(newPerk.inventory)
+      };
+      setPerks([...perks, perk]);
+      setNotifications([
+        { id: Date.now(), type: 'success', message: `New perk "${newPerk.title}" created`, time: 'Just now' },
+        ...notifications
+      ]);
+      setNewPerk({
+        title: '',
+        description: '',
+        region: '',
+        threshold: 100,
+        inventory: 50,
+        tier: 'Bronze',
+        type: 'discount',
+        nftCode: '',
+        nfcCode: ''
+      });
+      setShowForm(false);
+    };
+
+    const generateCode = (type) => {
+      const code = Math.random().toString(36).substring(2, 10).toUpperCase();
+      setNewPerk({
+        ...newPerk,
+        [type]: code
+      });
+    };
+
+    return (
+      <div className="space-y-6">
+       
+
+        <div className="flex justify-between items-center">
+          <h3 className="text-xl font-semibold text-white">Active Perks</h3>
+          <button
+            onClick={() => setShowForm(true)}
+            className="bg-gradient-to-r from-green-600 to-teal-600 text-white px-6 py-2 rounded-lg hover:from-green-700 hover:to-teal-700 transition-all duration-300"
+          >
+            Create New Perk
+          </button>
+        </div>
+
+        {showForm && (
+          <div className="bg-gray-800 rounded-xl p-6">
+            <h4 className="text-lg font-semibold mb-4 text-white">Create New Perk</h4>
+            <form onSubmit={handleCreatePerk} className="space-y-4">
+              <div className="grid md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Perk Title</label>
+                  <input
+                    type="text"
+                    value={newPerk.title}
+                    onChange={(e) => setNewPerk({ ...newPerk, title: e.target.value })}
+                    className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-green-500 focus:outline-none text-white"
+                    placeholder="e.g., Free Coffee"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Region</label>
+                  <input
+                    type="text"
+                    value={newPerk.region}
+                    onChange={(e) => setNewPerk({ ...newPerk, region: e.target.value })}
+                    className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-green-500 focus:outline-none text-white"
+                    placeholder="e.g., San Francisco"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Spend Threshold ($)</label>
+                  <input
+                    type="number"
+                    value={newPerk.threshold}
+                    onChange={(e) => setNewPerk({ ...newPerk, threshold: parseInt(e.target.value) })}
+                    className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-green-500 focus:outline-none text-white"
+                    min="0"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Inventory Count</label>
+                  <input
+                    type="number"
+                    value={newPerk.inventory}
+                    onChange={(e) => setNewPerk({ ...newPerk, inventory: parseInt(e.target.value) })}
+                    className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-green-500 focus:outline-none text-white"
+                    min="1"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Tier Requirement</label>
+                  <select
+                    value={newPerk.tier}
+                    onChange={(e) => setNewPerk({ ...newPerk, tier: e.target.value })}
+                    className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-green-500 focus:outline-none text-white"
+                  >
+                    <option value="Bronze">Bronze</option>
+                    <option value="Silver">Silver</option>
+                    <option value="Gold">Gold</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">Perk Type</label>
+                  <select
+                    value={newPerk.type}
+                    onChange={(e) => setNewPerk({ ...newPerk, type: e.target.value })}
+                    className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-green-500 focus:outline-none text-white"
+                  >
+                    <option value="discount">Discount</option>
+                    <option value="freebie">Free Item</option>
+                    <option value="access">Special Access</option>
+                    <option value="nft">NFT Reward</option>
+                  </select>
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-300 mb-2">Description</label>
+                <textarea
+                  value={newPerk.description}
+                  onChange={(e) => setNewPerk({ ...newPerk, description: e.target.value })}
+                  className="w-full px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-green-500 focus:outline-none text-white"
+                  rows="3"
+                  placeholder="Describe the perk details..."
+                />
+              </div>
+
+              <div className="grid md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">NFT Unlock Code</label>
+                  <div className="flex space-x-2">
+                    <input
+                      type="text"
+                      value={newPerk.nftCode}
+                      onChange={(e) => setNewPerk({ ...newPerk, nftCode: e.target.value })}
+                      className="flex-1 px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-green-500 focus:outline-none text-white"
+                      placeholder="Enter or generate code"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => generateCode('nftCode')}
+                      className="px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                    >
+                      Generate
+                    </button>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-sm font-medium text-gray-300 mb-2">NFC Unlock Code</label>
+                  <div className="flex space-x-2">
+                    <input
+                      type="text"
+                      value={newPerk.nfcCode}
+                      onChange={(e) => setNewPerk({ ...newPerk, nfcCode: e.target.value })}
+                      className="flex-1 px-4 py-3 bg-gray-700 border border-gray-600 rounded-lg focus:border-green-500 focus:outline-none text-white"
+                      placeholder="Enter or generate code"
+                    />
+                    <button
+                      type="button"
+                      onClick={() => generateCode('nfcCode')}
+                      className="px-4 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                    >
+                      Generate
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex space-x-4">
+                <button
+                  type="submit"
+                  className="bg-gradient-to-r from-green-600 to-teal-600 text-white px-6 py-3 rounded-lg hover:from-green-700 hover:to-teal-700 transition-all duration-300"
+                >
+                  Create Perk
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowForm(false)}
+                  className="bg-gray-600 text-white px-6 py-3 rounded-lg hover:bg-gray-700 transition-colors"
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        )}
+
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {perks.map((perk) => (
+            <div key={perk.id} className="bg-gray-800 rounded-xl p-6 border border-gray-700">
+              <div className="flex items-center justify-between mb-4">
+                <h4 className="font-semibold text-white">{perk.title}</h4>
+                <Gift className="w-5 h-5 text-green-400" />
+              </div>
+              
+              <div className="space-y-2 text-sm">
+                <div className="flex justify-between">
+                  <span className="text-gray-400">Partner:</span>
+                  <span className="text-white">{perk.partner}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-400">Region:</span>
+                  <span className="text-white">{perk.region}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-400">Threshold:</span>
+                  <span className="text-white">${perk.threshold}</span>
+                </div>
+                <div className="flex justify-between">
+                  <span className="text-gray-400">Claimed:</span>
+                  <span className="text-white">{perk.claimed}/{perk.total}</span>
+                </div>
+              </div>
+
+              <div className="mt-4">
+                <div className="flex justify-between text-sm mb-1">
+                  <span className="text-gray-400">Inventory</span>
+                  <span className="text-white">{Math.round((perk.claimed / perk.total) * 100)}%</span>
+                </div>
+                <div className="w-full bg-gray-700 rounded-full h-2">
+                  <div
+                    className="bg-green-500 h-2 rounded-full transition-all duration-300"
+                    style={{ width: `${(perk.claimed / perk.total) * 100}%` }}
+                  />
+                </div>
+              </div>
+
+              <div className="mt-4 flex space-x-2">
+                <button className="flex-1 bg-blue-600 text-white py-2 px-4 rounded-lg hover:bg-blue-700 transition-colors text-sm">
+                  Edit
+                </button>
+                <button className="flex-1 bg-gray-600 text-white py-2 px-4 rounded-lg hover:bg-gray-700 transition-colors text-sm">
+                  Analytics
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  };
 
   // Step 3: Integration & Monitoring Component
   const IntegrationMonitoring = () => {
