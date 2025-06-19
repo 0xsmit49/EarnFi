@@ -470,43 +470,41 @@ const availableTags = [
           {showFilters && (
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-6 border-t border-slate-800/50">
               {/* Token Filter */}
-             
-
-              {/* Strategy Filter */}
               <div>
-                <label className="block text-sm font-medium text-slate-300 mb-2">Strategy Type</label>
+                <label className="block text-sm font-medium text-slate-300 mb-2">Assets</label>
+                <div className="flex flex-wrap gap-2">
+                  {tokens.slice(0, 6).map(token => (
+                    <button
+                      key={token}
+                      onClick={() => toggleFilter('tokens', token)}
+                      className={`px-3 py-1 rounded-md text-sm font-medium transition-colors ${
+                        filters.tokens.includes(token)
+                          ? 'bg-teal-500/20 text-teal-300 border border-teal-500/30'
+                          : 'bg-slate-800/50 text-slate-400 border border-slate-700/50 hover:bg-slate-700/50'
+                      }`}
+                    >
+                      {token}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Risk Filter */}
+              <div>
+                <label className="block text-sm font-medium text-slate-300 mb-2">Risk Level</label>
                 <select
-                  value={filters.strategyType}
-                  onChange={(e) => setFilters(prev => ({ ...prev, strategyType: e.target.value }))}
+                  value={filters.riskProfile}
+                  onChange={(e) => setFilters(prev => ({ ...prev, riskProfile: e.target.value }))}
                   className="w-full px-3 py-2 bg-slate-800/50 border border-slate-700/50 rounded-lg text-white focus:outline-none focus:border-teal-500/50"
                 >
-                  <option value="all">All Strategies</option>
-                  {strategyTypes.map(strategy => (
-                    <option key={strategy} value={strategy}>{strategy}</option>
+                  <option value="all">All Risk Levels</option>
+                  {riskProfiles.map(risk => (
+                    <option key={risk} value={risk}>{risk} Risk</option>
                   ))}
                 </select>
               </div>
-            </div>
-          )}
 
-          <div className="flex items-center justify-between mt-4 pt-4 border-t border-slate-800/50">
-            <div className="text-sm text-slate-400">
-              Showing <span className="text-white font-medium">{sortedVaults.length}</span> of {vaultData.length} vaults
-            </div>
-            <div className="flex items-center gap-2">
-              <button
-                onClick={() => setViewMode('grid')}
-                className={`p-2 rounded-lg transition-colors ${
-                  viewMode === 'grid' ? 'bg-teal-500/20 text-teal-400' : 'text-slate-400 hover:text-white'
-                }`}
-              >
-                <BarChart3 className="w-5 h-5" />
-              </button>
-              
-            </div>
-          </div>
-        </div>
-
+             
         {/* Vault Grid */}
         <div className={viewMode === 'grid' ? 'grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6' : 'space-y-4'}>
           {sortedVaults.map((vault) => (
