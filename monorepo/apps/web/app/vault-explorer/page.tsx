@@ -504,7 +504,41 @@ const availableTags = [
                 </select>
               </div>
 
-             
+              {/* Strategy Filter */}
+              <div>
+                <label className="block text-sm font-medium text-slate-300 mb-2">Strategy Type</label>
+                <select
+                  value={filters.strategyType}
+                  onChange={(e) => setFilters(prev => ({ ...prev, strategyType: e.target.value }))}
+                  className="w-full px-3 py-2 bg-slate-800/50 border border-slate-700/50 rounded-lg text-white focus:outline-none focus:border-teal-500/50"
+                >
+                  <option value="all">All Strategies</option>
+                  {strategyTypes.map(strategy => (
+                    <option key={strategy} value={strategy}>{strategy}</option>
+                  ))}
+                </select>
+              </div>
+            </div>
+          )}
+
+          <div className="flex items-center justify-between mt-4 pt-4 border-t border-slate-800/50">
+            <div className="text-sm text-slate-400">
+              Showing <span className="text-white font-medium">{sortedVaults.length}</span> of {vaultData.length} vaults
+            </div>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={() => setViewMode('grid')}
+                className={`p-2 rounded-lg transition-colors ${
+                  viewMode === 'grid' ? 'bg-teal-500/20 text-teal-400' : 'text-slate-400 hover:text-white'
+                }`}
+              >
+                <BarChart3 className="w-5 h-5" />
+              </button>
+              
+            </div>
+          </div>
+        </div>
+
         {/* Vault Grid */}
         <div className={viewMode === 'grid' ? 'grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6' : 'space-y-4'}>
           {sortedVaults.map((vault) => (
@@ -560,23 +594,7 @@ const availableTags = [
 
               {/* Key Metrics */}
               <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
-  {/* APY */}
-  <div className="p-4 rounded-xl bg-slate-800/50 border border-slate-700/50 shadow-inner backdrop-blur-md text-center transition-all duration-300 hover:scale-105 hover:shadow-lg hover:border-emerald-400/40 cursor-pointer">
-    <div className="text-2xl font-extrabold text-emerald-400">
-      {vault.apy.toFixed(2)}%
-    </div>
-    <div className="text-xs text-slate-400 mb-1">APY</div>
-    <div
-      className={`text-xs font-semibold px-2 py-0.5 rounded-full inline-block ${
-        vault.apyChange > 0
-          ? 'text-emerald-400 bg-emerald-500/10'
-          : 'text-red-400 bg-red-500/10'
-      }`}
-    >
-      {vault.apyChange > 0 ? '+' : ''}
-      {vault.apyChange.toFixed(2)}%
-    </div>
-  </div>
+
 
   {/* TVL */}
   <div className="p-4 rounded-xl bg-slate-800/50 border border-slate-700/50 shadow-inner backdrop-blur-md text-center transition-all duration-300 hover:scale-105 hover:shadow-lg hover:border-cyan-400/40 cursor-pointer">
