@@ -692,7 +692,21 @@ const availableTags = [
              <div
   className="p-4 rounded-xl bg-slate-800/50 border border-slate-700/50 backdrop-blur-md shadow-inner space-y-3 mb-4 transition-all duration-300 hover:scale-[1.015] hover:shadow-lg hover:border-teal-400/40 cursor-default group"
 >
-  
+  {/* Strategy */}
+  <div className="flex items-center justify-between text-sm border-b border-slate-700/40 pb-1 transition-all duration-200 group-hover:text-white">
+    <span className="text-slate-400 font-medium transition-colors group-hover:text-teal-300">
+      Strategy
+    </span>
+    <span className="text-white font-semibold">{vault.strategyType}</span>
+  </div>
+
+  {/* Curve Type */}
+  <div className="flex items-center justify-between text-sm border-b border-slate-700/40 pb-1 transition-all duration-200 group-hover:text-white">
+    <span className="text-slate-400 font-medium transition-colors group-hover:text-teal-300">
+      Curve Type
+    </span>
+    <span className="text-white font-semibold">{vault.curveType}</span>
+  </div>
 
   {/* IL Risk */}
   <div className="flex items-center justify-between text-sm transition-all duration-200 group-hover:text-white">
