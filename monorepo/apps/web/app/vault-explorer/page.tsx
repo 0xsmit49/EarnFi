@@ -612,7 +612,37 @@ const availableTags = [
     </div>
   </div>
 
- 
+  {/* TVL */}
+  <div className="p-4 rounded-xl bg-slate-800/50 border border-slate-700/50 shadow-inner backdrop-blur-md text-center transition-all duration-300 hover:scale-105 hover:shadow-lg hover:border-cyan-400/40 cursor-pointer">
+    <div className="text-xl font-extrabold text-white">
+      {formatCurrency(vault.tvl)}
+    </div>
+    <div className="text-xs text-slate-400 mb-1">TVL</div>
+    <div
+      className={`text-xs font-semibold px-2 py-0.5 rounded-full inline-block ${
+        vault.tvlChange > 0
+          ? 'text-emerald-400 bg-emerald-500/10'
+          : 'text-red-400 bg-red-500/10'
+      }`}
+    >
+      {vault.tvlChange > 0 ? '+' : ''}
+      {vault.tvlChange.toFixed(1)}%
+    </div>
+  </div>
+
+  {/* Depositors */}
+  <div className="p-4 rounded-xl bg-slate-800/50 border border-slate-700/50 shadow-inner backdrop-blur-md text-center transition-all duration-300 hover:scale-105 hover:shadow-lg hover:border-teal-400/40 cursor-pointer">
+    <div className="text-xl font-extrabold text-white">
+      {vault.depositors.toLocaleString()}
+    </div>
+    <div className="text-xs text-slate-400 mb-1">Depositors</div>
+    <div className="text-xs text-slate-400">
+      {vault.utilizationRate > 0
+        ? `${(vault.utilizationRate * 100).toFixed(0)}% util`
+        : 'Active'}
+    </div>
+  </div>
+</div>
 
               {/* Performance Chart
               <div className="mb-4">
@@ -662,21 +692,7 @@ const availableTags = [
              <div
   className="p-4 rounded-xl bg-slate-800/50 border border-slate-700/50 backdrop-blur-md shadow-inner space-y-3 mb-4 transition-all duration-300 hover:scale-[1.015] hover:shadow-lg hover:border-teal-400/40 cursor-default group"
 >
-  {/* Strategy */}
-  <div className="flex items-center justify-between text-sm border-b border-slate-700/40 pb-1 transition-all duration-200 group-hover:text-white">
-    <span className="text-slate-400 font-medium transition-colors group-hover:text-teal-300">
-      Strategy
-    </span>
-    <span className="text-white font-semibold">{vault.strategyType}</span>
-  </div>
-
-  {/* Curve Type */}
-  <div className="flex items-center justify-between text-sm border-b border-slate-700/40 pb-1 transition-all duration-200 group-hover:text-white">
-    <span className="text-slate-400 font-medium transition-colors group-hover:text-teal-300">
-      Curve Type
-    </span>
-    <span className="text-white font-semibold">{vault.curveType}</span>
-  </div>
+  
 
   {/* IL Risk */}
   <div className="flex items-center justify-between text-sm transition-all duration-200 group-hover:text-white">
