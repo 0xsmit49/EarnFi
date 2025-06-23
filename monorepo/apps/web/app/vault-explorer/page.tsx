@@ -580,13 +580,7 @@ const availableTags = [
   )}
 
   {vault.insurance && (
-    <div
-      className="flex items-center gap-1 px-2 py-0.5 bg-blue-500/10 text-blue-300 text-xs font-semibold rounded-full border border-blue-500/30 hover:scale-105 transition-all"
-      title="This vault is insured"
-    >
-      <Lock className="w-3.5 h-3.5" />
-      Locked
-    </div>
+  
   )}
 </div>
 
