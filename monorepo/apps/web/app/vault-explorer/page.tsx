@@ -728,17 +728,7 @@ const availableTags = [
 </div>
 
 
-            {/* Tags */}
-<div className="flex flex-wrap gap-2 mb-4">
-  {vault.tags.slice(0, 3).map((tag) => (
-    <span
-      key={tag}
-      className="px-3 py-1 rounded-full text-xs font-medium text-teal-300 bg-slate-800/60 border border-slate-700/60 shadow-sm transition-all duration-200 hover:bg-slate-700/60 hover:text-white hover:shadow-md hover:scale-105 cursor-default"
-    >
-      {tag}
-    </span>
-  ))}
-</div>
+
 
 
              {/* Actions */}
