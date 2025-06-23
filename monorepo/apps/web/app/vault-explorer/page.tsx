@@ -789,27 +789,7 @@ const availableTags = [
            <div className="p-6">
              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                {/* Performance Metrics */}
-               <div className="space-y-4">
-                 <h3 className="text-lg font-semibold text-white">Performance</h3>
-                 <div className="grid grid-cols-2 gap-4">
-                   <div className="bg-slate-800/50 p-4 rounded-lg">
-                     <div className="text-sm text-slate-400">Current APY</div>
-                     <div className="text-2xl font-bold text-emerald-400">{selectedVault.apy.toFixed(2)}%</div>
-                   </div>
-                   <div className="bg-slate-800/50 p-4 rounded-lg">
-                     <div className="text-sm text-slate-400">Sharpe Ratio</div>
-                     <div className="text-2xl font-bold text-white">{selectedVault.sharpeRatio.toFixed(1)}</div>
-                   </div>
-                   <div className="bg-slate-800/50 p-4 rounded-lg">
-                     <div className="text-sm text-slate-400">Volatility</div>
-                     <div className="text-2xl font-bold text-white">{(selectedVault.volatility * 100).toFixed(1)}%</div>
-                   </div>
-                   <div className="bg-slate-800/50 p-4 rounded-lg">
-                     <div className="text-sm text-slate-400">IL Risk</div>
-                     <div className="text-2xl font-bold text-white">{selectedVault.impermanentLoss.toFixed(2)}%</div>
-                   </div>
-                 </div>
-               </div>
+             
 
                {/* Vault Details */}
                <div className="space-y-4">
