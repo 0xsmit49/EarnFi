@@ -205,7 +205,13 @@ const riskProfiles = [
   'Medium', // LSTs, algorithmic stables
   'High'      // Volatile pairs or unhedged vaults
 ];
-
+const strategyTypes = [
+  'Delta-Hedged Stable AMM',
+  'Volatility Hedged AMM',
+  'LST Rebalancer',
+  'Stability Band AMM',
+  'Soft Peg Vault'
+];
 const vaultAges = [
   'New',            // Launched < 7 days ago
   'Active',         // 1-4 weeks, accumulating TVL
