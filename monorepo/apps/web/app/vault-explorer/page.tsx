@@ -355,23 +355,7 @@ const availableTags = [
     return (
       <div className="flex items-center gap-3">
       {/* Risk Bars */}
-      <div className="flex gap-1">
-        {[1, 2, 3].map((level) => (
-          <div
-            key={level}
-            className={`w-3 h-4 rounded-full transition-all duration-300 ${
-              level <= riskScore
-                ? riskScore === 1
-                  ? 'bg-emerald-500'
-                  : riskScore === 2
-                  ? 'bg-amber-400'
-                  : 'bg-red-500'
-                : 'bg-gray-700'
-            }`}
-          />
-        ))}
-      </div>
-    
+     
       {/* Risk Label */}
       <span
         className={`text-xs font-semibold capitalize px-2 py-0.5 rounded-md transition-colors duration-300 ${getRiskColor(vault.riskProfile)} bg-opacity-10`}
@@ -580,7 +564,13 @@ const availableTags = [
   )}
 
   {vault.insurance && (
-  
+    <div
+      className="flex items-center gap-1 px-2 py-0.5 bg-blue-500/10 text-blue-300 text-xs font-semibold rounded-full border border-blue-500/30 hover:scale-105 transition-all"
+      title="This vault is insured"
+    >
+      <Lock className="w-3.5 h-3.5" />
+      Locked
+    </div>
   )}
 </div>
 
