@@ -373,7 +373,19 @@ const availableTags = [
       </div>
     
       {/* Risk Label */}
-   
+      <span
+        className={`text-xs font-semibold capitalize px-2 py-0.5 rounded-md transition-colors duration-300 ${getRiskColor(vault.riskProfile)} bg-opacity-10`}
+        style={{
+          backgroundColor:
+            vault.riskProfile === 'low'
+              ? 'rgba(16, 185, 129, 0.15)'
+              : vault.riskProfile === 'medium'
+              ? 'rgba(251, 191, 36, 0.15)'
+              : 'rgba(239, 68, 68, 0.15)',
+        }}
+      >
+        Risk: {vault.riskProfile}
+      </span>
     </div>
     
     );
@@ -382,7 +394,7 @@ const availableTags = [
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 text-white">
       {/* Header */}
-      <MyCustomComponent/>
+      
       <div className="border-b border-slate-800/50 bg-slate-950/50 backdrop-blur-xl">
   <div className="container mx-auto px-6 py-10">
     {/* Centered Title and Subtitle */}
