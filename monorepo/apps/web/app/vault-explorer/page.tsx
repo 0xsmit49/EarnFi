@@ -410,7 +410,12 @@ const availableTags = [
     {/* Metrics Row */}
     <div className="flex flex-wrap justify-center gap-6">
       {/* Total Assets */}
-      
+      <div className="bg-slate-800/50 rounded-xl px-16 py-5 text-center border border-slate-700/50 hover:border-teal-400/40 transition-all">
+        <div className="text-sm md:text-base text-slate-400 mb-1">Total Assets</div>
+        <div className="text-xl md:text-2xl font-bold text-white">
+          {formatCurrency(sortedVaults.reduce((sum, vault) => sum + vault.tvl, 0))}
+        </div>
+      </div>
 
       {/* Avg APY */}
       <div className="bg-slate-800/50 rounded-xl px-16 py-5 text-center border border-slate-700/50 hover:border-teal-400/40 transition-all">
