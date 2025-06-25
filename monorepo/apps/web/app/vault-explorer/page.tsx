@@ -355,21 +355,25 @@ const availableTags = [
     return (
       <div className="flex items-center gap-3">
       {/* Risk Bars */}
-     
+      <div className="flex gap-1">
+        {[1, 2, 3].map((level) => (
+          <div
+            key={level}
+            className={`w-3 h-4 rounded-full transition-all duration-300 ${
+              level <= riskScore
+                ? riskScore === 1
+                  ? 'bg-emerald-500'
+                  : riskScore === 2
+                  ? 'bg-amber-400'
+                  : 'bg-red-500'
+                : 'bg-gray-700'
+            }`}
+          />
+        ))}
+      </div>
+    
       {/* Risk Label */}
-      <span
-        className={`text-xs font-semibold capitalize px-2 py-0.5 rounded-md transition-colors duration-300 ${getRiskColor(vault.riskProfile)} bg-opacity-10`}
-        style={{
-          backgroundColor:
-            vault.riskProfile === 'low'
-              ? 'rgba(16, 185, 129, 0.15)'
-              : vault.riskProfile === 'medium'
-              ? 'rgba(251, 191, 36, 0.15)'
-              : 'rgba(239, 68, 68, 0.15)',
-        }}
-      >
-        Risk: {vault.riskProfile}
-      </span>
+   
     </div>
     
     );
