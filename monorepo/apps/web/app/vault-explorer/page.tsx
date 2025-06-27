@@ -644,7 +644,7 @@ const availableTags = [
   </div>
 </div>
 
-              Performance Chart
+              {/* Performance Chart
               <div className="mb-4">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-sm font-medium text-slate-300">Performance (5D)</span>
@@ -653,7 +653,7 @@ const availableTags = [
                   </span>
                 </div>
                 <PerformanceChart data={vault.performance} />
-              </div>
+              </div> */}
 
              {/* Risk & Audit Box */}
 <div
