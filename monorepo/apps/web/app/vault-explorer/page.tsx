@@ -630,8 +630,21 @@ const availableTags = [
     </div>
   </div>
 
+  {/* Depositors */}
+  <div className="p-4 rounded-xl bg-slate-800/50 border border-slate-700/50 shadow-inner backdrop-blur-md text-center transition-all duration-300 hover:scale-105 hover:shadow-lg hover:border-teal-400/40 cursor-pointer">
+    <div className="text-xl font-extrabold text-white">
+      {vault.depositors.toLocaleString()}
+    </div>
+    <div className="text-xs text-slate-400 mb-1">Depositors</div>
+    <div className="text-xs text-slate-400">
+      {vault.utilizationRate > 0
+        ? `${(vault.utilizationRate * 100).toFixed(0)}% util`
+        : 'Active'}
+    </div>
+  </div>
+</div>
 
-              {/* Performance Chart
+              Performance Chart
               <div className="mb-4">
                 <div className="flex items-center justify-between mb-2">
                   <span className="text-sm font-medium text-slate-300">Performance (5D)</span>
@@ -640,7 +653,7 @@ const availableTags = [
                   </span>
                 </div>
                 <PerformanceChart data={vault.performance} />
-              </div> */}
+              </div>
 
              {/* Risk & Audit Box */}
 <div
